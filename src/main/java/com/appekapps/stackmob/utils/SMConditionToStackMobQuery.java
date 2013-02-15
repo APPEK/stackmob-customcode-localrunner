@@ -34,7 +34,6 @@ public class SMConditionToStackMobQuery
 	
 	public static void addSMCondition(StackMobQuery stackMobQuery, SMCondition smCondition)
 	{
-		// Convert this to switch for JRE 1.7.
 		if(smCondition.getClass().equals(com.stackmob.sdkapi.SMEquals.class))
 		{
 			addSMEquals(stackMobQuery, smCondition);
@@ -58,6 +57,8 @@ public class SMConditionToStackMobQuery
 	private static void addSMIn(StackMobQuery stackMobQuery, SMCondition smCondition)
 	{
 		SMIn smIn = (SMIn) smCondition;
+		
+		stackMobQuery.fieldIsIn(smIn.getField(), );
 	}
 	
 	private static void addSMEquals(StackMobQuery stackMobQuery, SMCondition smCondition)
@@ -93,29 +94,31 @@ public class SMConditionToStackMobQuery
 	private static void addSMLessOrEqual(StackMobQuery stackMobQuery, SMCondition smCondition)
 	{
 		SMLessOrEqual smLessOrEqual = (SMLessOrEqual) smCondition;
-		stackMobQuery.fieldIsLessThanOrEqualTo(smLessOrEqual.getField(), smLessOrEqual.getValue().toString());
+		stackMobQuery.fieldIslessThanOrEqualTo(smLessOrEqual.getField(), smLessOrEqual.getValue().toString());
 	}
 	
 	private static void addSMNear(StackMobQuery stackMobQuery, SMCondition smCondition)
 	{
 		SMNear smNear = (SMNear) smCondition;
-		StackMobGeoPoint stackMobGeoPoint = SMNearToStackMobGeoPoint(smNear);
+		StackMobGeoPoint point = new StackMobGeoPoint(smNear.getLon().getValue(), smNear.getLat().getValue());
 		
-		stackMobQuery.fieldIsNear(smNear.getField(), smNear.)
+		stackMobQuery.fieldIsNearWithinKm(smNear.getField(), point, StackMobGeoPoint.radiansToKm(smNear.getDist().getValue()));
 	}
 	
 	private static void addSMWithin(StackMobQuery stackMobQuery, SMCondition smCondition)
 	{
 		SMWithin smWithin = (SMWithin) smCondition;
+		StackMobGeoPoint point = new StackMobGeoPoint(smWithin.getLon().getValue(), smWithin.getLat().getValue());
+		
+		stackMobQuery.fieldIsWithinRadiusInKm(smWithin.getField(), point, StackMobGeoPoint.radiansToKm(smWithin.getDist().getValue()));
 	}
 	
 	private static void addSMWithinBox(StackMobQuery stackMobQuery, SMCondition smCondition)
 	{
 		SMWithinBox smWithinBox = (SMWithinBox) smCondition;
-	}
-	
-	private static StackMobGeoPoint SMNearToStackMobGeoPoint(SMNear smNear)
-	{
-		return new StackMobGeoPoint(smNear.getLat().getValue(), smNear.getLon().getValue());
+		StackMobGeoPoint lowerLeft = new StackMobGeoPoint(smWithinBox.getLonLL().getValue(), smWithinBox.getLatLL().getValue());
+		StackMobGeoPoint upperRight = new StackMobGeoPoint(smWithinBox.getLonUR().getValue(), smWithinBox.getLatUR().getValue());
+		
+		stackMobQuery.fieldIsWithinBox(smWithinBox.getField(), lowerLeft, upperRight);
 	}
 }

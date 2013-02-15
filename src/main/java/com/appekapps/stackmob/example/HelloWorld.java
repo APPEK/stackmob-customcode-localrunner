@@ -1,13 +1,12 @@
 package com.appekapps.stackmob.example;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.appekapps.stackmob.utils.Printer;
 import com.stackmob.core.MethodVerb;
 import com.stackmob.core.customcode.CustomCodeMethod;
 import com.stackmob.core.rest.ProcessedAPIRequest;
@@ -68,7 +67,7 @@ public class HelloWorld implements CustomCodeMethod
 		}
 		catch(Exception e)
 		{
-			errorMap = getExceptionAsMap(e);
+			errorMap = Printer.getExceptionAsMap(e);
 		}
 		
 		if(!errorMap.isEmpty())
@@ -77,28 +76,5 @@ public class HelloWorld implements CustomCodeMethod
 		}
 		
 		return new ResponseToProcess(HttpURLConnection.HTTP_OK, responseMap);
-	}
-	
-	// Writes an Exception as a map.
-	public Map<String,String> getExceptionAsMap(Exception e)
-	{
-		Map<String,String> exception = new HashMap<String,String>();
-		
-		exception.put("error", e.getClass().getName());
-		exception.put("message", e.getMessage());
-		exception.put("stacktrace", getStackTraceAsString(e));
-		
-		return exception;
-	}
-	
-	// Writes an Exception's StackTrace as a string.
-	public String getStackTraceAsString(Exception e)
-	{
-		StringWriter stringWriter = new StringWriter();
-		PrintWriter printWriter = new PrintWriter(stringWriter);
-		
-		e.printStackTrace(printWriter);
-		
-		return stringWriter.toString();
 	}
 }
