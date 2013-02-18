@@ -52,7 +52,7 @@ public class APKStackMob
 			@Override
 			public void failure(StackMobException e)
 			{
-				System.out.println(e);
+				System.out.println(Printer.getStackTraceAsString(e));
 				countDownLatch.countDown();
 			}
 		});

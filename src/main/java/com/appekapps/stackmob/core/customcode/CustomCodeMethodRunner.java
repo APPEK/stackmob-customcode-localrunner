@@ -17,10 +17,15 @@ public class CustomCodeMethodRunner
 		this.serviceProvider = new APKSDKServiceProvider();
 		this.customCodeMethod = customCodeMethod;
 	}
-	
+		
 	public void setCredentials(String username, String password)
 	{
 		this.serviceProvider = new APKSDKServiceProvider(username, password);
+	}
+	
+	public void setRequest(APKProcessedAPIRequest apkProcessedAPIRequest)
+	{
+		this.request = apkProcessedAPIRequest;
 	}
 	
 	public ResponseToProcess execute()
