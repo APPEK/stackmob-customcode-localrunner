@@ -34,25 +34,6 @@ public class HelloWorld implements CustomCodeMethod
 	@Override
 	public ResponseToProcess execute(ProcessedAPIRequest request, SDKServiceProvider serviceProvider) 
 	{   		
-		MethodVerb methodVerb = request.getVerb();
-
-		switch(methodVerb)
-		{
-			case GET:
-				return executeGet(request, serviceProvider);
-			case POST:
-				//return executePost(request, serviceProvider);
-			case PUT:
-				//return executePut(request, serviceProvider);
-			case DELETE:
-				//return executeDelete(request, serviceProvider);
-			default:
-				return new ResponseToProcess(HttpURLConnection.HTTP_NOT_IMPLEMENTED);
-		}
-	}
-	
-	public ResponseToProcess executeGet(ProcessedAPIRequest request, SDKServiceProvider serviceProvider)
-	{		
 		DataService dataService = serviceProvider.getDataService();
 		
 		Map<String,String> errorMap = new HashMap<String,String>();
@@ -63,7 +44,7 @@ public class HelloWorld implements CustomCodeMethod
 			List<SMCondition> smConditions = new ArrayList<SMCondition>();
 			smConditions.add(new SMEquals("username", new SMString("test")));
 			
-			dataService.readObjects("users", smConditions);
+			dataService.readObjects("user", smConditions);
 		}
 		catch(Exception e)
 		{

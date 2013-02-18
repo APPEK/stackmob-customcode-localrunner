@@ -3,9 +3,17 @@ package com.appekapps.stackmob.sdkapi;
 import java.net.ConnectException;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
+import com.appekapps.stackmob.utils.Printer;
+import com.appekapps.stackmob.utils.SMConditionToStackMobQuery;
 import com.stackmob.core.DatastoreException;
 import com.stackmob.core.InvalidSchemaException;
+import com.stackmob.sdk.api.StackMob;
+import com.stackmob.sdk.api.StackMobDatastore;
+import com.stackmob.sdk.callback.StackMobCallback;
+import com.stackmob.sdk.exception.StackMobException;
 import com.stackmob.sdkapi.BulkResult;
 import com.stackmob.sdkapi.DataService;
 import com.stackmob.sdkapi.ResultFilters;
@@ -17,6 +25,13 @@ import com.stackmob.sdkapi.SMValue;
 
 public class APKDataService implements DataService 
 {
+	private final int TIMEOUT = 5000;
+	private StackMobDatastore datastore;
+	
+	public APKDataService(StackMob stackMob)
+	{
+		this.datastore = stackMob.getDatastore();
+	}
 
 	@Override
 	public String getUserSchema() {
@@ -40,10 +55,36 @@ public class APKDataService implements DataService
 	}
 
 	@Override
-	public List<SMObject> readObjects(String schema,
-			List<SMCondition> conditions) throws InvalidSchemaException,
-			DatastoreException {
-		// TODO Auto-generated method stub
+	public List<SMObject> readObjects(String schema, List<SMCondition> conditions) throws InvalidSchemaException, DatastoreException 
+	{
+		final CountDownLatch countDownLatch = new CountDownLatch(1);
+		
+		this.datastore.get(SMConditionToStackMobQuery.StackMobQuery(schema, conditions), new StackMobCallback()
+		{
+			@Override
+			public void success(String responseBody)
+			{				
+				System.out.println(responseBody);
+				countDownLatch.countDown();
+			}
+			
+			@Override
+			public void failure(StackMobException e)
+			{
+				System.out.println(Printer.getExceptionAsMap(e));
+				countDownLatch.countDown();
+			}
+		});
+		
+		try
+		{
+			countDownLatch.await(TIMEOUT, TimeUnit.MILLISECONDS);			
+		}
+		catch(Exception e)
+		{
+			System.out.println(Printer.getExceptionAsMap(e));
+		}
+		
 		return null;
 	}
 
