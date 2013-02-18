@@ -38,7 +38,24 @@ public class SMConditionToStackMobQuery
 	
 	public static void addSMCondition(StackMobQuery stackMobQuery, SMCondition smCondition)
 	{
-		if(smCondition.getClass().equals(com.stackmob.sdkapi.SMEquals.class))
+		Class clazz = smCondition.getClass();
+		if(clazz.equals(com.stackmob.sdkapi.SMIsNull.class))
+		{
+			addSMIsNull(stackMobQuery, smCondition);
+		}
+		else if(clazz.equals(com.stackmob.sdkapi.SMIn.class))
+		{
+			addSMIn(stackMobQuery, smCondition);
+		}
+		else if(clazz.equals(com.stackmob.sdkapi.SMEquals.class))
+		{
+			addSMEquals(stackMobQuery, smCondition);
+		}
+		else if(clazz.equals(com.stackmob.sdkapi.SMNotEqual.class))
+		{
+			addSMNotEqual(stackMobQuery, smCondition);
+		}
+		else if(clazz.equals(com.stackmob.sdkapi.SMEquals.class))
 		{
 			addSMEquals(stackMobQuery, smCondition);
 		}
@@ -66,7 +83,7 @@ public class SMConditionToStackMobQuery
 		List<String> inValues = new ArrayList<String>();		
 		for(SMValue<?> smValue : smValues)
 		{
-			inValues.add(SMValueToObject.toString(smValue));
+			inValues.add(smValue.toString());
 		}
 		
 		stackMobQuery.fieldIsIn(smIn.getField(), inValues);
