@@ -1,5 +1,8 @@
 package com.appekapps.stackmob.utils;
 
+import java.util.List;
+import java.util.Map;
+
 import com.stackmob.sdkapi.SMCollection;
 import com.stackmob.sdkapi.SMList;
 import com.stackmob.sdkapi.SMObject;
@@ -9,19 +12,34 @@ import com.stackmob.sdkapi.SMValue;
 
 public class SMValueToObject 
 {
-	public static SMValue SMValue(SMValue smValue)
+	public static Object fromSMValue(SMValue<?> smValue)
 	{
+		if(smValue.isA(SMCollection.class))
+		{
+			return toCollection(smValue);
+		}
+		else if(smValue.isA(SMObject.class))
+		{
+			return toObject(smValue);
+		}
+		else if(smValue.isA(SMPrimitive.class))
+		{
+			return toPrimitive(smValue);
+		}
+		else if(smValue.isA(SMString.class))
+		{
+			return toString(smValue);
+		}
 		
+		return null;
 	}
 	
-	private static SMString toSMString(SMValue<SMString> smValue)
-	{		
+	public static List<? extends SMValue> toCollection(SMValue<?> smValue)
+	{
 		try
 		{
-			if(smValue.isA(SMString.class))
-			{
-				return smValue.asA(SMString.class);
-			}
+			SMList<? extends SMValue> smList = smValue.asA(SMList.class);
+			return smList.getValue();
 		}
 		catch(Exception e)
 		{
@@ -31,19 +49,12 @@ public class SMValueToObject
 		return null;
 	}
 	
-	private static String toString(SMString smString)
+	public static Map<String, ? extends SMValue> toObject(SMValue<?> smValue)
 	{
-		return smString.getValue();
-	}
-	
-	private static SMObject toSMObject(SMValue<SMObject> smValue)
-	{		
 		try
 		{
-			if(smValue.isA(SMObject.class))
-			{
-				return smValue.asA(SMObject.class);
-			}
+			SMObject smObject = smValue.asA(SMObject.class);
+			return smObject.getValue();
 		}
 		catch(Exception e)
 		{
@@ -53,20 +64,17 @@ public class SMValueToObject
 		return null;
 	}
 	
-	private static Map<String,Object> toObject(SMObject smObject)
+	public static Object toPrimitive(SMValue<?> smValue)
 	{
-		// Iterate the map.
-		// Reconstruct as Java types.
+		return SMPrimitiveToPrimitive.fromSMValue(smValue);
 	}
 	
-	private static SMPrimitive toSMPrimitive(SMValue<SMPrimitive> smValue)
+	public static String toString(SMValue<?> smValue)
 	{
 		try
 		{
-			if(smValue.isA(SMPrimitive.class))
-			{
-				return smValue.asA(SMPrimitive.class);
-			}
+			SMString smString = smValue.asA(SMString.class);
+			return smString.getValue();
 		}
 		catch(Exception e)
 		{
@@ -74,32 +82,5 @@ public class SMValueToObject
 		}
 		
 		return null;
-	}
-	
-	private static SMCollection toSMCollection(SMValue<SMCollection> smValue)
-	{
-		try
-		{
-			if(smValue.isA(SMCollection.class))
-			{
-				return smValue.asA(SMCollection.class);
-			}
-		}
-		catch(Exception e)
-		{
-			System.out.println(Printer.getStackTraceAsString(e));
-		}
-		
-		return null;
-	}
-	
-	private List<Object> toList(SMList<SMValue> smList)
-	{
-		// Conver to primitive... so much... nesting... need... sleep
-	}
-	
-	private static List<Object> toList(SMCollection smCollection)
-	{
-		return toList(smCollection.getValue());
 	}
 }

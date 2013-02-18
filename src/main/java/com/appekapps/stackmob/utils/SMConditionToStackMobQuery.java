@@ -1,5 +1,6 @@
 package com.appekapps.stackmob.utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.stackmob.sdk.api.StackMobGeoPoint;
@@ -9,11 +10,14 @@ import com.stackmob.sdkapi.SMEquals;
 import com.stackmob.sdkapi.SMGreater;
 import com.stackmob.sdkapi.SMGreaterOrEqual;
 import com.stackmob.sdkapi.SMIn;
+import com.stackmob.sdkapi.SMInt;
 import com.stackmob.sdkapi.SMIsNull;
 import com.stackmob.sdkapi.SMLess;
 import com.stackmob.sdkapi.SMLessOrEqual;
 import com.stackmob.sdkapi.SMNear;
 import com.stackmob.sdkapi.SMNotEqual;
+import com.stackmob.sdkapi.SMString;
+import com.stackmob.sdkapi.SMValue;
 import com.stackmob.sdkapi.SMWithin;
 import com.stackmob.sdkapi.SMWithinBox;
 
@@ -57,8 +61,15 @@ public class SMConditionToStackMobQuery
 	private static void addSMIn(StackMobQuery stackMobQuery, SMCondition smCondition)
 	{
 		SMIn smIn = (SMIn) smCondition;
+		List<? extends SMValue> smValues = smIn.getValues();
 		
-		stackMobQuery.fieldIsIn(smIn.getField(), );
+		List<String> inValues = new ArrayList<String>();		
+		for(SMValue<?> smValue : smValues)
+		{
+			inValues.add(SMValueToObject.toString(smValue));
+		}
+		
+		stackMobQuery.fieldIsIn(smIn.getField(), inValues);
 	}
 	
 	private static void addSMEquals(StackMobQuery stackMobQuery, SMCondition smCondition)
@@ -76,25 +87,61 @@ public class SMConditionToStackMobQuery
 	private static void addSMGreater(StackMobQuery stackMobQuery, SMCondition smCondition)
 	{
 		SMGreater smGreater = (SMGreater) smCondition;
-		stackMobQuery.fieldIsGreaterThan(smGreater.getField(), smGreater.getValue().toString());
+		SMValue<?> smValue = smGreater.getValue();
+		
+		if(smValue.isA(SMInt.class))
+		{
+			stackMobQuery.fieldIsGreaterThan(smGreater.getField(), SMPrimitiveToPrimitive.toLong(smValue).intValue());
+		}
+		else if(smValue.isA(SMString.class))
+		{
+			stackMobQuery.fieldIsGreaterThan(smGreater.getField(), smValue.toString());
+		}
 	}
 	
 	private static void addSMGreaterOrEqual(StackMobQuery stackMobQuery, SMCondition smCondition)
 	{
 		SMGreaterOrEqual smGreaterOrEqual = (SMGreaterOrEqual) smCondition;
-		stackMobQuery.fieldIsGreaterThanOrEqualTo(smGreaterOrEqual.getField(), smGreaterOrEqual.getValue().toString());
+		SMValue<?> smValue = smGreaterOrEqual.getValue();
+		
+		if(smValue.isA(SMInt.class))
+		{
+			stackMobQuery.fieldIsGreaterThanOrEqualTo(smGreaterOrEqual.getField(), SMPrimitiveToPrimitive.toLong(smValue).intValue());
+		}
+		else if(smValue.isA(SMString.class))
+		{
+			stackMobQuery.fieldIsGreaterThanOrEqualTo(smGreaterOrEqual.getField(), smValue.toString());
+		}
 	}
 	
 	private static void addSMLess(StackMobQuery stackMobQuery, SMCondition smCondition)
 	{
 		SMLess smLess = (SMLess) smCondition;
-		stackMobQuery.fieldIsLessThan(smLess.getField(), smLess.getValue().toString());
+		SMValue<?> smValue = smLess.getValue();
+		
+		if(smValue.isA(SMInt.class))
+		{
+			stackMobQuery.fieldIsLessThan(smLess.getField(), SMPrimitiveToPrimitive.toLong(smValue).intValue());
+		}
+		else
+		{
+			stackMobQuery.fieldIsLessThan(smLess.getField(), smValue.toString());
+		}
 	}
 	
 	private static void addSMLessOrEqual(StackMobQuery stackMobQuery, SMCondition smCondition)
 	{
 		SMLessOrEqual smLessOrEqual = (SMLessOrEqual) smCondition;
-		stackMobQuery.fieldIslessThanOrEqualTo(smLessOrEqual.getField(), smLessOrEqual.getValue().toString());
+		SMValue<?> smValue = smLessOrEqual.getValue();
+		
+		if(smValue.isA(SMInt.class))
+		{
+			stackMobQuery.fieldIsLessThanOrEqualTo(smLessOrEqual.getField(), SMPrimitiveToPrimitive.toLong(smValue).intValue());
+		}
+		else
+		{
+			stackMobQuery.fieldIslessThanOrEqualTo(smLessOrEqual.getField(), smValue.toString());
+		}
 	}
 	
 	private static void addSMNear(StackMobQuery stackMobQuery, SMCondition smCondition)
