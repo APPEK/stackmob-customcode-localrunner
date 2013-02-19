@@ -78,7 +78,7 @@ public class APKDataService implements DataService
 		
 		try
 		{
-			countDownLatch.await(TIMEOUT, TimeUnit.MILLISECONDS);			
+			countDownLatch.await(this.TIMEOUT, TimeUnit.MILLISECONDS);			
 		}
 		catch(Exception e)
 		{

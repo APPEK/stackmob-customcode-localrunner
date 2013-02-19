@@ -10,7 +10,6 @@ import com.stackmob.sdkapi.SMEquals;
 import com.stackmob.sdkapi.SMGreater;
 import com.stackmob.sdkapi.SMGreaterOrEqual;
 import com.stackmob.sdkapi.SMIn;
-import com.stackmob.sdkapi.SMInt;
 import com.stackmob.sdkapi.SMIsNull;
 import com.stackmob.sdkapi.SMLess;
 import com.stackmob.sdkapi.SMLessOrEqual;
@@ -20,6 +19,7 @@ import com.stackmob.sdkapi.SMValue;
 import com.stackmob.sdkapi.SMWithin;
 import com.stackmob.sdkapi.SMWithinBox;
 
+@SuppressWarnings("rawtypes")
 public class SMConditionToStackMobQuery 
 {	
 	public static StackMobQuery StackMobQuery(String objectName, List<SMCondition> conditions)
@@ -29,7 +29,7 @@ public class SMConditionToStackMobQuery
 		
 		for(SMCondition condition : conditions)
 		{
-			addSMCondition(stackMobQuery, condition);
+			SMConditionToStackMobQuery.addSMCondition(stackMobQuery, condition);
 		}
 		
 		return stackMobQuery;
@@ -41,51 +41,51 @@ public class SMConditionToStackMobQuery
 		
 		if(clazz.equals(com.stackmob.sdkapi.SMIsNull.class))
 		{
-			addSMIsNull(stackMobQuery, smCondition);
+			SMConditionToStackMobQuery.addSMIsNull(stackMobQuery, smCondition);
 		}
 		else if(clazz.equals(com.stackmob.sdkapi.SMIn.class))
 		{
-			addSMIn(stackMobQuery, smCondition);
+			SMConditionToStackMobQuery.addSMIn(stackMobQuery, smCondition);
 		}
 		else if(clazz.equals(com.stackmob.sdkapi.SMEquals.class))
 		{
-			addSMEquals(stackMobQuery, smCondition);
+			SMConditionToStackMobQuery.addSMEquals(stackMobQuery, smCondition);
 		}
 		else if(clazz.equals(com.stackmob.sdkapi.SMNotEqual.class))
 		{
-			addSMNotEqual(stackMobQuery, smCondition);
+			SMConditionToStackMobQuery.addSMNotEqual(stackMobQuery, smCondition);
 		}
 		else if(clazz.equals(com.stackmob.sdkapi.SMEquals.class))
 		{
-			addSMEquals(stackMobQuery, smCondition);
+			SMConditionToStackMobQuery.addSMEquals(stackMobQuery, smCondition);
 		}
 		else if(clazz.equals(com.stackmob.sdkapi.SMGreater.class))
 		{
-			addSMGreater(stackMobQuery, smCondition);
+			SMConditionToStackMobQuery.addSMGreater(stackMobQuery, smCondition);
 		}
 		else if(clazz.equals(com.stackmob.sdkapi.SMGreaterOrEqual.class))
 		{
-			addSMGreaterOrEqual(stackMobQuery, smCondition);
+			SMConditionToStackMobQuery.addSMGreaterOrEqual(stackMobQuery, smCondition);
 		}
 		else if(clazz.equals(com.stackmob.sdkapi.SMLess.class))
 		{
-			addSMLess(stackMobQuery, smCondition);
+			SMConditionToStackMobQuery.addSMLess(stackMobQuery, smCondition);
 		}
 		else if(clazz.equals(com.stackmob.sdkapi.SMLessOrEqual.class))
 		{
-			addSMLessOrEqual(stackMobQuery, smCondition);
+			SMConditionToStackMobQuery.addSMLessOrEqual(stackMobQuery, smCondition);
 		}
 		else if(clazz.equals(com.stackmob.sdkapi.SMNear.class))
 		{
-			addSMNear(stackMobQuery, smCondition);
+			SMConditionToStackMobQuery.addSMNear(stackMobQuery, smCondition);
 		}
 		else if(clazz.equals(com.stackmob.sdkapi.SMWithin.class))
 		{
-			addSMWithin(stackMobQuery, smCondition);
+			SMConditionToStackMobQuery.addSMWithin(stackMobQuery, smCondition);
 		}
 		else if(clazz.equals(com.stackmob.sdkapi.SMWithinBox.class))
 		{
-			addSMWithinBox(stackMobQuery, smCondition);
+			SMConditionToStackMobQuery.addSMWithinBox(stackMobQuery, smCondition);
 		}
 	}
 	

@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.appekapps.stackmob.utils.Printer;
-import com.stackmob.core.MethodVerb;
 import com.stackmob.core.customcode.CustomCodeMethod;
 import com.stackmob.core.rest.ProcessedAPIRequest;
 import com.stackmob.core.rest.ResponseToProcess;

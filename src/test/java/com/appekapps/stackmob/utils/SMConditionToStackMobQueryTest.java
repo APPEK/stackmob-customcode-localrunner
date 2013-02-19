@@ -3,7 +3,6 @@ package com.appekapps.stackmob.utils;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
@@ -16,14 +15,12 @@ import com.stackmob.sdkapi.SMEquals;
 import com.stackmob.sdkapi.SMGreater;
 import com.stackmob.sdkapi.SMGreaterOrEqual;
 import com.stackmob.sdkapi.SMIn;
-import com.stackmob.sdkapi.SMInt;
 import com.stackmob.sdkapi.SMIsNull;
 import com.stackmob.sdkapi.SMLess;
 import com.stackmob.sdkapi.SMLessOrEqual;
 import com.stackmob.sdkapi.SMNear;
 import com.stackmob.sdkapi.SMNotEqual;
 import com.stackmob.sdkapi.SMString;
-import com.stackmob.sdkapi.SMValue;
 import com.stackmob.sdkapi.SMWithin;
 import com.stackmob.sdkapi.SMWithinBox;
 

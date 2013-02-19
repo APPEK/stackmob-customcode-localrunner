@@ -27,6 +27,11 @@ public class APKSDKServiceProvider implements SDKServiceProvider
 		this.stackMob = APKStackMob.getStackMobWithCredentials(username, password);
 	}
 	
+	public StackMob getStackMob()
+	{
+		return stackMob;
+	}
+	
 	@Override
 	public LoggerService getLoggerService(Class clazz) {
 		// TODO Auto-generated method stub

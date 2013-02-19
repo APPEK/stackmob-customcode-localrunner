@@ -36,11 +36,11 @@ public class APKStackMob
 		final CountDownLatch countDownLatch = new CountDownLatch(1);
 
 		Map<String,String> params = new HashMap<String,String>();
-		params.put(userIdName, username);
-		params.put(passwordFieldName, password);
+		params.put(APKStackMob.userIdName, username);
+		params.put(APKStackMob.passwordFieldName, password);
 		
 		APKStackMob.stackMob = APKStackMob.getStackMob();		
-		stackMob.login(params, new StackMobCallback()
+		APKStackMob.stackMob.login(params, new StackMobCallback()
 		{
 			@Override
 			public void success(String responseBody)
@@ -66,6 +66,6 @@ public class APKStackMob
 			System.out.println(Printer.getStackTraceAsString(e));
 		}
 		
-		return APKStackMob.stackMob ;
+		return APKStackMob.stackMob;
 	}
 }
